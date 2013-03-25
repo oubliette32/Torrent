@@ -1,0 +1,72 @@
+"Gamemode"
+{
+	"base"		"base"
+	"title"		"Torrent"
+	"maps"		"^tr_"
+	"menusystem"	"1"
+
+	"settings"
+	{
+		1
+		{
+			"name"		"tr_buildtime"
+			"text"		"Build Time"
+			"help"		"The amount of time in seconds that build state will last for."
+			"type"		"numeric"
+			"default"	"360"
+		}
+
+
+		
+		2
+		{
+			"name"		"tr_mounttime"
+			"text"		"Mount time"
+			"help"		"The amount of time in seconds that's given for players to mount their boats."
+			"type"		"numeric"
+			"default"	"20"
+		}
+
+		3
+		{
+			"name"		"tr_fighttime"
+			"text"		"Fight Time"
+			"help"		"The amount of time players are given to fight before armageddon."
+			"type"		"numeric"
+			"default"	"480"
+		}
+
+
+		4
+		{
+			"name"		"tr_restarttime"
+			"text"		"Restart Time"
+			"help"		"The amount of times in seconds that winners will be allowed to grind for."
+			"type"		"numeric"
+			"default"	"30"
+		}
+
+		5
+		{
+			"name"		"tr_minmoney"
+			"text"		"Minimum Money"
+			"help"		"The minimum amount of money that players will have prior to new rounds."
+			"type"		"numeric"
+			"default"	"3000"
+		}
+
+
+		6
+		{
+			"name"		"tr_startingmoney"
+			"text"		"Starting Money"
+			"help"		"The money that new players will start with."
+			"type"		"numeric"
+			"default"	"10000"
+		}
+
+
+
+	}
+
+}
