@@ -11,7 +11,6 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_VPHYSICS );
 
 	self:GetPhysicsObject():Wake();
-
 end
 
 function ENT:Think()
@@ -24,16 +23,15 @@ function ENT:PhysicsCollide( colData, physObj )
 
 	local ent = colData.HitEntity;
 
-	if ( ent && IsValid( ent ) && ent:IsPlayer() && TR ) then // The TR check is to make sure that the gamemode is Torrent thus checking if the functions inside it are available
+	if ( ent && IsValid( ent ) && ent:IsPlayer() ) then 
 
-		if ( TR.CurState == TR_STATE_FIGHT && !ent:CanInteract( ent ) ) then
+		if ( TR && TR.CurState == TR_STATE_FIGHT && !ent:CanInteract( self ) ) then 
 
-			local phys = ent:GetPhysicsObject();
-			local vel = phys:GetVelocity();
+			ent:SetPos( ent:GetPos() + Vector( 0, 0, 3 ) );
+			ent:SetLocalVelocity( Vector( math.random( -150, 150 ), math.random( -150, 150 ), 350 ) );
+			ent:ViewPunch( Angle( math.random( -10, 10 ), math.random( -10, 10 ), math.random( -10, 10 ) ) );
 
-			phys:SetVelocity( -vel + Vector( 0, 0, 400 ) );
-
-			ent:TakeDamage( math.random( 5, 15 ), self, self );
+			ent:TakeDamage( math.random( 5, 10 ), self );
 
 		end
 

@@ -1,3 +1,20 @@
+/*
+ *  Torrent - 2013 Illuminati Productions
+ *
+ *  This product is licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ */
+
 local panel = {};
 
 function panel:Init()
@@ -30,7 +47,11 @@ function panel:Init()
 	self.mode = true;
 	self.mul = 1;
 
+	// This is added into the circular calculations to "stretch" the circle on the X axis
+	self.stretch = 0;
 
+	// The speed that the panel is opened and closed at 
+	self.stateSpeed = 20;
 
 end 
 
@@ -52,7 +73,7 @@ function panel:HideCatergoryContents()
 
 end
 
-function panel:Think()
+function panel:ValidateAngles()
 
 	if ( self.mode ) then 
 
@@ -88,8 +109,13 @@ function panel:Think()
 
 	end
 
-	local i = 0;
+end
 
+function panel:Think()
+
+	self:ValidateAngles();
+
+	local i = 0;
 	for name, panel in pairs( self.Items[ self.CurrentCatergory ] or {} ) do 
 
 		if ( !ValidPanel( panel ) ) then continue; end
@@ -98,10 +124,10 @@ function panel:Think()
 
 			if ( !panel:IsVisible() ) then panel:SetVisible( true ); end
 			
- 			local x = ( math.sin( ( ( (self.angle + i) ) * math.pi ) / 180 ) ) * ( (ScrW() / 6) - 25 );
+ 			local x = ( math.sin( ( ( (self.angle + i) ) * math.pi ) / 180 ) ) * ( (ScrW() / 6) - 25 - self.stretch );
  			local y = ( math.cos( ( ( (self.angle + i) ) * math.pi ) / 180 ) ) * ( (ScrH() / 2) - 25 );
 
-			panel:SetPos( (self.x + x) - 25, (self.y + y) - 25 );
+			panel:SetPos( ( self.x + x ) - 25, (self.y + y) - 25 );
 
 		else 
 
@@ -109,7 +135,7 @@ function panel:Think()
 
 		end
 
-		i = i - ( self.mul * 25 );
+		i = i - ( self.mul * ( 25 ) );
 
 
 	end
@@ -124,23 +150,38 @@ function panel:CalcRotate()
 
 		if ( self.lastY ) then 
 
-			self.inertia = (self.lastY - gui.MouseY()) / 5
+			self.inertia = self.inertia + ( self.lastY - gui.MouseY() ) / 20;
 
 		end
-		
+
+		if ( self.lastX ) then 
+
+			self.stretch = self.stretch + ( self.lastX - gui.MouseX() );
+
+		end
+	else 
+
+		self.stretch = Lerp( 0.30, self.stretch or 0, 0); 
+
 	end
 
 	// Apply inertial force
 	self.angle = self.angle + self.mul * (self.inertia or 0);
 
 	// Decrease inertia
-	self.inertia = Lerp( 0.10, self.inertia or 0, 0); 
+	self.inertia = Lerp( 0.10, self.inertia or 0, self.shouldClose and -10 or 0 ); 
 
-	if ( math.abs(self.inertia) <= 0 ) then 
+
+	if ( self.angle <= 0 ) then 
 
 		if ( self.stopFunc && isfunction( self.stopFunc ) && !self.hasStopped ) then 
+
 			self.stopFunc();
 			self.hasStopped = true;
+
+			// In every case the panel should stop it's eternal intertia when the panel has reached it's destination
+			self.shouldClose = false;
+
 		end
 
 	else 
@@ -151,6 +192,7 @@ function panel:CalcRotate()
 
 	// Store last mouse position
 	self.lastY = gui.MouseY();
+	self.lastX = gui.MouseX();
 
 end 
 
@@ -160,7 +202,8 @@ function panel:Open()
 
 	self.angle = 0;
 
-	self.inertia =  table.Count( self.Items[ self.CurrentCatergory ] or {} ) + 1;
+	// Kick the panel open
+	self.inertia = self.stateSpeed;
 
 end
 
@@ -168,7 +211,8 @@ function panel:Close()
 
 	if ( self.stopFunc ) then return; end
 
-	self.inertia = - math.max( ( table.Count( self.Items[ self.CurrentCatergory ] or {} ) - 1 ) * 4, 20 );
+	// Keep spinning the panel until it closes
+	self.shouldClose = true;
 
 end
 
@@ -181,6 +225,7 @@ end
 function panel:OnMousePressed( panel, func )
 	
 	panel.isDepressed = true;
+	panel.startClickX, panel.startClickY = gui.MouseX(), gui.MouseY();
 	panel.pressedAt = CurTime();
 
 end

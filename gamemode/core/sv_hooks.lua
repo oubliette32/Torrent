@@ -1,3 +1,20 @@
+/*
+ *  Torrent - 2013 Illuminati Productions
+ *
+ *  This product is licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ */
+
 util.AddNetworkString("TorrentTick");
 util.AddNetworkString("TorrentStateChanged");
 
@@ -75,7 +92,7 @@ hook.Add( "TorrentStateFight", "TSF", function()
 
 	// Unfreeze props 
 
-	for _, ent in pairs( ents.FindByClass( "prop_physics" ) ) do 
+	for _, ent in pairs( ents.FindByClass( "torrent_prop" ) ) do 
 
 		if ( ent && IsValid( ent ) ) then 
 
@@ -295,7 +312,7 @@ hook.Add( "PlayerShouldTakeDamage", "PSTD", function( ent, inflictor )
 
 	else 
 
-		return inflictor and inflictor:GetClass() == "trigger_hurt" or false;
+		return inflictor and ( inflictor:GetClass() == "trigger_hurt"  or inflictor:GetClass() == "torrent_prop" ) or false;
 
 	end 
 
@@ -308,7 +325,7 @@ end);
 // Not using this hook was causing problems
 hook.Add( "EntityTakeDamage", "ETD", function( ent, dmginfo ) 
 
-	if ( (ent:IsPlayer() || ent:GetClass() == "torrent_prop") && TR.CurState != TR_STATE_FIGHT ) then 
+	if ( ent:IsPlayer() || ( ent:GetClass() == "torrent_prop" && TR.CurState != TR_STATE_FIGHT ) ) then 
 
 		return false;
 

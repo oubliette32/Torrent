@@ -1,4 +1,21 @@
 /*
+ *  Torrent - 2013 Illuminati Productions
+ *
+ *  This product is licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ */
+
+/*
 	The HUD that has far too many polygons.
 */
 
@@ -122,8 +139,8 @@ local polyMainLW = {
 local polyMainLW2 = {
 	[1] = { x = ( ScrW() / 2 ) - 75, y = ScrH() },
 	[2] = { x = ( ScrW() / 2 ) - 100, y = ScrH() },
-	[3] = { x = ( ScrW() / 2 ) - 40, y = ScrH() - 100 },
-	[4] = { x = ( ScrW() / 2 ) - 15, y = ScrH() - 100 }
+	[3] = { x = ( ScrW() / 2 ) - 25, y = ScrH() - 125 },
+	[4] = { x = ( ScrW() / 2 ), y = ScrH() - 125 }
 }
 
 /*
@@ -140,8 +157,8 @@ local polyMainRW = {
 
 
 local polyMainRW2 = {
-	[1] = { x = ( ScrW() / 2 ) + 15, y = ScrH() - 100 },
-	[2] = { x = ( ScrW() / 2 ) + 40, y = ScrH() - 100 },
+	[1] = { x = ( ScrW() / 2 ), y = ScrH() - 125 },
+	[2] = { x = ( ScrW() / 2 ) + 25, y = ScrH() - 125 },
 	[3] = { x = ( ScrW() / 2 ) + 100, y = ScrH() },
 	[4] = { x = ( ScrW() / 2 ) + 75, y = ScrH() }
 }
@@ -408,7 +425,7 @@ function HUD.DrawTimer()
 	end
 
 	// A lot of linear interpolation, I know, it's the only way to get the effect I want.
-	if ( ent && IsValid( ent ) && ent:GetTOwner() && ent:GetTOwner():IsPlayer() ) then
+	if ( ent && IsValid( ent ) && ent.GetTOwner && ent:GetTOwner() && ent:GetTOwner():IsPlayer() ) then
 
 		local name = ( ent:GetTOwner():GetName():len() <= 15 ) and ent:GetTOwner():GetName() or ent:GetTOOwner():GetName():sub( 1, 15 ) .. ".. ";
 
@@ -654,7 +671,7 @@ function HUD.DrawPropCount()
 
 	// Prop count bar
 
-	local propCount, maxProps = LocalPlayer():GetPropCount(), TR_MAX_PROPS;
+	local propCount, maxProps = LocalPlayer():GetPropCount(), LocalPlayer():MaxProps();
 
 	if ( propCount > maxProps ) then propCount = maxProps; end
 
@@ -675,6 +692,20 @@ function HUD.DrawPropCount()
 		draw.SimpleText( prefix .. propCount .. " / " .. maxProps, "TorrentFontVerySmall", polyMainPC[ 4 ].x - ( percent / 2 ), polyMainPC[ 4 ].y - 1, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM );
 
 	end
+
+end
+
+local illuminati = Material( "logo/illuminati.png" );
+
+function HUD.DrawLogo()
+
+	surface.SetDrawColor( Color( 255, 255, 255, 255 ) );
+
+	surface.SetMaterial( illuminati );
+
+	surface.DrawTexturedRect( 500, 800, 100, 100 );
+
+	//surface.SetMaterial( nil );
 
 end
 

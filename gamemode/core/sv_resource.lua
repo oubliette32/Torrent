@@ -14,32 +14,9 @@
  *  limitations under the License.
  *  
  */
+ 
+// A list of resources to send to the client
 
-function string.FormatNumber( str )
+// TODO: Add a auto-resource-sending-piece-of-fancy-code 
 
-	str = str tostring( str );
-
-	local newStr = "";
-	local ins = ( str:len() >= 4 and 1 or -1 );
-
-	for i = 1, str:len() do 
-
-		if ( ins == 0 ) then 
-
-			newStr = newStr .. ",";
-
-			ins = 3;
-
-		else 
-
-			ins = ins - 1;
-
-		end
-
-		newStr = newStr .. str[ i ];
-
-	end
-
-	return newStr;
-
-end
+resource.AddFile( "materials/logo/illuminati.png" )

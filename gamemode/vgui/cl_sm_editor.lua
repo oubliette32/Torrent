@@ -1,5 +1,20 @@
-// Reformatted code from OubHack, c_basepanel
-
+/*
+ *  Torrent - 2013 Illuminati Productions
+ *
+ *  This product is licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ */
+ 
 local panel = {};
 
 panel.SelectedEntities = {}
@@ -57,16 +72,16 @@ function panel:Init()
 		
 		local ent = self:GetMouseEntity();
 
-		if ( !ent || !IsValid( ent ) || ent:GetTOwner() != LocalPlayer() ) then return; end
+		if ( !ent || !IsValid( ent ) || !LocalPlayer():CanInteract( ent ) ) then return; end
 
 		table.Empty( self.SelectedEntities );
-
+		
 	end,
 	function()
 
 		local ent = self:GetMouseEntity();
 
-		if ( !ent || !IsValid( ent ) || ent:GetTOwner() != LocalPlayer() ) then return; end
+		if ( !ent || !IsValid( ent ) || !LocalPlayer():CanInteract( ent ) ) then return; end
 
 		if ( ( ent.lClick or 0 ) >= CurTime() ) then 
 
@@ -84,7 +99,7 @@ function panel:Init()
 
 			for _, _ent in pairs( ents.FindByClass( "torrent_prop" ) ) do 
 
-				if ( _ent:GetModel() == ent:GetModel() && _ent:GetTOwner() == LocalPlayer() ) then 
+				if ( _ent:GetModel() == ent:GetModel() && LocalPlayer():CanInteract( _ent ) ) then 
 
 					net.Start( "TorrentEntitySelect" );
 						net.WriteEntity( _ent );
@@ -98,7 +113,7 @@ function panel:Init()
 
 			for _, _ent in pairs( ents.FindByClass( "torrent_prop" ) ) do 
 
-				if ( _ent:GetTOwner() == LocalPlayer() ) then 
+				if ( LocalPlayer():CanInteract( ent ) ) then 
 
 					net.Start( "TorrentEntitySelect" );
 						net.WriteEntity( _ent );

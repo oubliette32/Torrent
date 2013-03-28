@@ -1,3 +1,20 @@
+/*
+ *  Torrent - 2013 Illuminati Productions
+ *
+ *  This product is licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ */
+
 TR = {};
 TR.Author = "Oubliette";
 TR.Contact = "http://facepunch.com/member.php?u=469591";
@@ -19,23 +36,38 @@ local function aInclude( files, folder )
 		local p = string.Left( v, 2 );
 
 		if ( p == "sh" ) then 
+
 			if ( SERVER ) then AddCSLuaFile( folder .. "/" .. v ); end
+
 			include( folder .. "/" .. v );
 			MsgN(folder .. "/" .. v .. " loaded!");
+
 		elseif ( p == "sv" ) then 
+
 			if ( SERVER ) then 
+
 				include( folder .. "/" .. v );
 				MsgN(folder .. "/" .. v .. " loaded!");
+
 			end
+
 		elseif ( p == "cl" ) then 
+
 			if ( SERVER ) then 
+
 				AddCSLuaFile( folder .. "/" .. v );
+
 			else 
+
 				include( folder .. "/" .. v );
 				MsgN(folder .. "/" .. v .. " loaded!");
+
 			end
+
 		else 
+
 			ErrorNoHalt( "Unknown prefix '" .. tostring( p ) .. "'\n" );
+			
 		end
 
 	end
