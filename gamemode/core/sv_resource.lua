@@ -19,4 +19,6 @@
 
 // TODO: Add a auto-resource-sending-piece-of-fancy-code 
 
-resource.AddFile( "materials/logo/illuminati.png" )
+resource.AddFile( "materials/logo/illuminati.png" );
+resource.AddFile( "materials/logo/illuminati_eye.png" );
+resource.AddFile( "materials/logo/illuminati_eye_bg.png" );
